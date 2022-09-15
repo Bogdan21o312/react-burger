@@ -1,0 +1,280 @@
+@use "sass:math";
+
+@import "src/style/Style";
+
+//====================================================================================================
+
+div {
+  padding-top: 200px;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  transition: all 0.3s ease 0s;
+  @include adaptiveValue("padding-top", 60, 10);
+  @include adaptiveValue("padding-bottom", 60, 10);
+
+  &._header-scroll {
+    padding-top: rem(20);
+    padding-bottom: rem(20);
+    background-color: $whiteColor;
+  }
+
+  &__container {
+    display: grid;
+    grid-template-columns: rem(300) 1fr rem(300);
+    align-items: center;
+    @media (max-width: em(1080)) {
+      grid-template-columns: auto 1fr auto;
+    }
+  }
+
+  &__logo {
+    position: relative;
+    z-index: 5;
+    transition: all 0.3s ease 0s;
+    @media (any-hover: hover) {
+      &:hover {
+      }
+    }
+    @include adaptiveValue("font-size", 30, 15);
+    letter-spacing: 0.27rem;
+
+    img {
+      max-width: 100%;
+    }
+  }
+
+  &__menu {
+  }
+
+  &__action {
+    display: flex;
+    gap: rem(16);
+    align-items: center;
+    position: relative;
+    z-index: 5;
+    margin-left: auto;
+  }
+
+  &__button {
+  }
+}
+
+.menu {
+  padding: 0 rem(10);
+
+  &__body {
+    @media (max-width: $mobile) {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      top: 0;
+      left: -100%;
+      transition: all 0.3s ease 0s;
+      overflow: auto;
+      background-color: $whiteColor;
+      gap: rem(30);
+      @include adaptiveValue("padding-top", 180, 120, 768, 320, 2);
+      padding-left: rem(15);
+      padding-right: rem(15);
+      padding-bottom: rem(30);
+      &::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: -100%;
+        transition: all 0.3s ease 0s;
+        width: 100%;
+        @include adaptiveValue("height", 70, 50, 768, 320, 2);
+        background-color: #dadada;
+        z-index: 2;
+      }
+      .menu-open & {
+        left: 0;
+
+        &::before {
+          left: 0;
+        }
+      }
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    @include adaptiveValue("font-size", 16, 14, 1440, 767.98, 1);
+    row-gap: rem(10);
+    column-gap: rem(44);
+    @include adaptiveValue("gap", 44, 15);
+    @media (max-width: $mobile) {
+      flex-direction: column;
+      text-align: center;
+      row-gap: rem(40);
+    }
+  }
+
+  &__item {
+  }
+
+  &__link {
+    @media (max-width: $mobile) {
+      font-size: rem(40);
+    }
+    transition: color 0.3s ease 0s;
+    @media (any-hover: hover) {
+      &:hover {
+      }
+    }
+  }
+}
+
+.button {
+  @media (max-width: $mobile) {
+    width: 100%;
+    @include adaptiveValue("height", 100, 50);
+  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: transparent;
+  border: rem(1) solid $mainColor;
+  outline: none;
+  transition: 1s ease-in-out;
+  @media (any-hover: hover) {
+    &:hover {
+      transition: 1s ease-in-out;
+
+      span {
+        color: $whiteColor;
+      }
+
+      border: rem(2) solid beige;
+
+      svg {
+        stroke-dashoffset: -480;
+      }
+    }
+  }
+
+  span {
+    transition: all 0.3s ease 0s;
+    font-size: rem(18);
+    font-weight: 100;
+    padding: rem(20) rem(30);
+  }
+
+  svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    fill: none;
+    stroke: #fff;
+    stroke-dasharray: 150 480;
+    stroke-dashoffset: 150;
+    transition: 1s ease-in-out;
+  }
+}
+
+.menu__body.menu-open {
+  left: 0;
+
+  &::before {
+    left: 0;
+  }
+}
+
+//====================================================================================================
+
+//Burger
+
+.icon-menu {
+  display: none;
+  @media (max-width: $mobile) {
+    display: block;
+    position: relative;
+    width: rem(30);
+    height: rem(18);
+    cursor: pointer;
+    z-index: 5;
+    span,
+    &::before,
+    &::after {
+      content: "";
+      transition: all 0.3s ease 0s;
+      right: 0;
+      position: absolute;
+      width: 100%;
+      height: rem(2);
+      background-color: #000;
+    }
+    &::before {
+      top: 0;
+    }
+    &::after {
+      bottom: 0;
+    }
+    span {
+      top: calc(50% - rem(1));
+    }
+    .menu-open {
+      span {
+        width: 0;
+      }
+
+      &::before,
+      &::after {
+      }
+
+      &::before {
+        top: calc(50% - rem(1));
+        transform: rotate(-45deg);
+      }
+
+      &::after {
+        bottom: calc(50% - rem(1));
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+
+
+.menu-open {
+  .lock & {
+    overflow: hidden;
+    touch-action: none;
+    overscroll-behavior: none;
+  }
+
+  .icon-menu.menu-open {
+    span {
+      width: 0;
+    }
+
+    &::before,
+    &::after {
+    }
+
+    &::before {
+      top: calc(50% - rem(1));
+      transform: rotate(-45deg);
+    }
+
+    &::after {
+      bottom: calc(50% - rem(1));
+      transform: rotate(45deg);
+    }
+  }
+}
+
